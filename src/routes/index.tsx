@@ -1,24 +1,43 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Activity, BatteryCharging, Camera, FileImage, FileText, Gauge, Link2, Mic, QrCode, ShieldCheck, Smartphone, Wifi, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { FixMyTechShell, SectionHeading, StatusPill } from "@/components/fixmytech-shell";
+import { ToolCard } from "@/components/tool-card";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "FixMyTech — Test it. Understand it. Fix it." },
+      { name: "description", content: "Troubleshoot phones, internet, files, devices, and security directly from your browser." },
+      { property: "og:title", content: "FixMyTech — Test it. Understand it. Fix it." },
+      { property: "og:description", content: "Troubleshoot phones, internet, files, devices, and security directly from your browser." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+  }),
+  component: HomePage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
+function HomePage() {
+  const [category, setCategory] = useState("Internet");
+  const [online, setOnline] = useState(true);
+  useEffect(() => { setOnline(navigator.onLine); const update = () => setOnline(navigator.onLine); window.addEventListener("online", update); window.addEventListener("offline", update); return () => { window.removeEventListener("online", update); window.removeEventListener("offline", update); }; }, []);
+
+  const recommendations = category === "Internet" ? [{ title: "Internet Troubleshooter", description: "Check connectivity, latency, and stability with honest browser-safe tests.", to: "/diagnostics", icon: Wifi, tone: "lavender" as const }, { title: "Internet Speed Test", description: "Measure your connection when you need a clear baseline.", to: "/diagnostics?tab=speed", icon: Gauge, tone: "sky" as const }] : category === "Files" ? [{ title: "Image Compressor", description: "Shrink images on-device, with a before-and-after preview.", to: "/tools?tool=image", icon: FileImage, tone: "lavender" as const }, { title: "Make this file uploadable", description: "Set a target size and format before you send a file.", to: "/tools?tool=optimize", icon: Zap, tone: "sun" as const }] : category === "Security" ? [{ title: "URL Risk Checker", description: "Review visible risk signals without opening a suspicious destination.", to: "/security?tool=url", icon: Link2, tone: "rose" as const }, { title: "Phishing Checker", description: "Look for urgency, mismatched links, and social engineering cues.", to: "/security?tool=email", icon: ShieldCheck, tone: "sky" as const }] : [{ title: "Test My Device", description: "Run camera, microphone, screen, and browser capability checks.", to: "/device", icon: Smartphone, tone: "mint" as const }, { title: "Battery Information", description: "See what your browser can report about battery status.", to: "/device?test=battery", icon: BatteryCharging, tone: "sun" as const }];
+  const choices = [{ label: "Phone", icon: Smartphone }, { label: "Internet", icon: Wifi }, { label: "Computer", icon: Activity }, { label: "Files", icon: FileText }, { label: "Security", icon: ShieldCheck }, { label: "Test device", icon: Smartphone }];
+  return <FixMyTechShell><main className="mx-auto max-w-7xl space-y-8 px-4 pb-28 pt-6 sm:px-6 sm:pt-8 lg:px-8 lg:pb-10">
+    <section className="grid gap-6 lg:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
+      <div className="brand-surface relative overflow-hidden rounded-[2rem] p-6 shadow-soft sm:p-8"><div className="absolute right-8 top-8 size-24 rounded-full border border-on-brand/20" aria-hidden="true" /><div className="absolute -bottom-10 right-20 size-32 rounded-full border border-on-brand/10" aria-hidden="true" /><div className="relative max-w-2xl"><div className="flex items-center justify-between gap-4"><span className="font-mono text-[10px] uppercase tracking-[0.2em] text-electric">System status / {online ? "online" : "offline"}</span><StatusPill tone={online ? "mint" : "sun"}>{online ? "Live" : "Offline"}</StatusPill></div><h1 className="mt-8 max-w-xl font-display text-4xl font-extrabold leading-[0.98] tracking-tight text-on-brand sm:text-6xl">Having a Tech Problem? <span className="text-electric">Let’s Fix It.</span></h1><p className="mt-5 max-w-lg text-sm leading-6 text-on-brand/80">Test, diagnose and solve everyday phone, internet, file, device, and security problems — directly from your browser.</p><div className="mt-7 flex flex-wrap gap-3"><Button asChild variant="quiet" size="lg" className="border-on-brand/20 bg-on-brand text-navy hover:bg-on-brand/90"><Link to="/diagnostics">Diagnose a problem <Activity /></Link></Button><Button asChild variant="ghost" size="lg" className="border border-on-brand/25 text-on-brand hover:bg-on-brand/10"><Link to="/tools">Explore all tools</Link></Button></div></div></div>
+      <section className="instrument-card quiet-grid rounded-[2rem] p-5 sm:p-6"><div className="flex items-center justify-between"><div><p className="font-mono text-[10px] uppercase tracking-[0.18em] text-indigo">Browser snapshot</p><h2 className="mt-2 font-display text-2xl font-extrabold">Ready when you are.</h2></div><div className="grid size-14 place-items-center rounded-full bg-lavender text-indigo"><Gauge className="size-6" /></div></div><div className="mt-6 grid grid-cols-3 gap-2"><Snapshot label="Network" value={online ? "Ready" : "Offline"} tone={online ? "mint" : "sun"} /><Snapshot label="Device" value="Ready" tone="blue" /><Snapshot label="Privacy" value="Local" tone="mint" /></div><p className="mt-5 text-xs leading-5 text-soft">No test result is shown until you run it. Browser permissions are requested only when a test needs them.</p><Button asChild variant="dark" className="mt-5 w-full"><Link to="/device">Open device tests <Smartphone /></Link></Button></section>
+    </section>
+    <section><SectionHeading eyebrow="Start with a signal" title="What’s wrong?" description="Pick the closest match and we’ll put the most relevant tool first." /><div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">{choices.map(({ label, icon: Icon }) => <Button key={label} type="button" variant={category === label ? "dark" : "quiet"} className="h-auto min-h-24 flex-col items-start justify-between gap-3 rounded-2xl p-3 text-left" onClick={() => setCategory(label)}><Icon className={category === label ? "text-electric" : "text-indigo"} /><span className="text-xs">{label}</span></Button>)}</div></section>
+    <section><div className="mb-4 flex items-end justify-between gap-4"><div><p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-indigo">Based on your selection</p><h2 className="font-display text-2xl font-extrabold">Recommended next steps</h2></div><Link to="/tools" className="text-xs font-semibold text-indigo hover:underline">View all tools →</Link></div><div className="grid gap-4 md:grid-cols-2">{recommendations.map((tool) => <ToolCard key={tool.title} {...tool} category={category} />)}</div></section>
+    <section><SectionHeading eyebrow="Popular tools" title="Small fixes. Clear signals." action={<Link to="/tools" className="text-xs font-semibold text-indigo hover:underline">View all →</Link>} /><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><ToolCard title="Image Compressor" description="Shrink PNG or JPEG files in your browser." category="File utility" to="/tools?tool=image" icon={FileImage} tone="lavender" /><ToolCard title="URL Risk Checker" description="Inspect a link before you open it." category="Security" to="/security?tool=url" icon={Link2} tone="rose" /><ToolCard title="QR Safety Scanner" description="Preview QR content with a safety pause." category="Security" to="/security?tool=qr" icon={QrCode} tone="sky" /><ToolCard title="Camera Test" description="Request access and verify a live camera stream." category="Device test" to="/device?test=camera" icon={Camera} tone="sun" /></div></section>
+    <section className="grid gap-4 md:grid-cols-2"><div className="instrument-card rounded-3xl p-5"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-2xl bg-sky-soft text-royal"><Mic className="size-5" /></span><div><p className="font-display text-lg font-bold">Recently used</p><p className="text-xs text-soft">Your guest session stays on this device.</p></div></div><div className="mt-5 grid grid-cols-2 gap-2"><Link to="/diagnostics" className="rounded-2xl bg-mist p-3 text-xs font-semibold hover:bg-lavender">Internet checks <span className="mt-1 block font-mono text-[10px] text-soft">Ready to run</span></Link><Link to="/security?tool=url" className="rounded-2xl bg-mist p-3 text-xs font-semibold hover:bg-lavender">URL risk check <span className="mt-1 block font-mono text-[10px] text-soft">No stored links</span></Link></div></div><div className="rounded-3xl bg-ink p-5 text-canvas"><div className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-2xl bg-mint/20 text-mint"><ShieldCheck className="size-5" /></span><div><p className="font-display text-lg font-bold">Your files are yours.</p><p className="text-xs text-canvas/70">Processed in your browser by default.</p></div></div><div className="mt-5 grid gap-2 text-xs text-canvas/80"><p>• Client-side processing where practical</p><p>• No automatic upload for core file tools</p><p>• Clear permission explanations</p></div><Link to="/privacy" className="mt-5 inline-flex text-xs font-semibold text-electric hover:underline">Read the privacy center →</Link></div></section>
+  </main></FixMyTechShell>;
 }
+
+function Snapshot({ label, value, tone }: { label: string; value: string; tone: "mint" | "sun" | "blue" }) { return <div className="rounded-2xl bg-canvas p-3"><p className="font-mono text-[9px] uppercase tracking-wide text-soft">{label}</p><p className={`mt-1 font-display text-base font-extrabold ${tone === "mint" ? "text-mint" : tone === "sun" ? "text-sun" : "text-royal"}`}>{value}</p><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line"><div className={`h-full rounded-full ${tone === "mint" ? "w-full bg-mint" : tone === "sun" ? "w-1/2 bg-sun" : "w-4/5 bg-royal"}`} /></div></div>; }
