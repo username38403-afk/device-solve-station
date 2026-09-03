@@ -24,7 +24,7 @@ function isAppTheme(value: string | null): value is AppTheme {
 
 function applyTheme(theme: AppTheme) {
   const root = document.documentElement;
-  root.dataset.theme = theme;
+  root.dataset["theme"] = theme;
   root.classList.toggle("dark", theme === "dark");
   root.style.colorScheme = theme === "dark" ? "dark" : "light";
 }
