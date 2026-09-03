@@ -1,7 +1,8 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Menu, Search, Wrench, Activity, ShieldCheck, Boxes, Smartphone, X } from "lucide-react";
+import { Menu, Search, Wrench, Activity, ShieldCheck, Boxes, Smartphone, X, Palette, Check } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { themeOptions, useTheme, type AppTheme } from "@/components/theme-provider";
 
 const navItems = [
   { label: "Fixes", to: "/fixes", icon: Wrench },
@@ -14,6 +15,13 @@ const navItems = [
 export function FixMyTechShell({ children }: { children: ReactNode }) {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  const chooseTheme = (nextTheme: AppTheme) => {
+    setTheme(nextTheme);
+    setThemeOpen(false);
+  };
 
   return (
     <div className="min-h-dvh bg-canvas text-ink">
@@ -65,7 +73,7 @@ export function FixMyTechShell({ children }: { children: ReactNode }) {
               {menuOpen ? <X /> : <Menu />}
             </Button>
           </div>
-          {menuOpen && <nav className="border-t border-line bg-surface px-4 py-3 lg:hidden" aria-label="Mobile navigation"><div className="grid grid-cols-2 gap-2 sm:grid-cols-5">{navItems.map(({ label, to, icon: Icon }) => <Link key={to} to={to} onClick={() => setMenuOpen(false)} className="flex min-h-11 items-center gap-2 rounded-2xl bg-mist px-3 text-sm font-semibold text-ink"><Icon className="size-4 text-indigo" aria-hidden="true" />{label}</Link>)}</div></nav>}
+          {menuOpen && <nav className="border-t border-line bg-surface px-4 py-3 lg:hidden" aria-label="Mobile navigation"><div className="grid grid-cols-2 gap-2 sm:grid-cols-5">{navItems.map(({ label, to, icon: Icon }) => <Link key={to} to={to} onClick={() => setMenuOpen(false)} className="flex min-h-11 items-center gap-2 rounded-2xl bg-mist px-3 text-sm font-semibold text-ink"><Icon className="size-4 text-indigo" aria-hidden="true" />{label}</Link>)}</div><ThemeMenu theme={theme} themeOpen={themeOpen} onToggle={() => setThemeOpen((value) => !value)} onChoose={chooseTheme} mobile /></nav>}
         </header>
         {children}
       </div>
