@@ -47,6 +47,7 @@ export function FixMyTechShell({ children }: { children: ReactNode }) {
             })}
           </nav>
         </div>
+        <ThemeMenu theme={theme} themeOpen={themeOpen} onToggle={() => setThemeOpen((value) => !value)} onChoose={chooseTheme} />
         <div className="mt-auto rounded-3xl bg-ink p-4 text-canvas">
           <ShieldCheck className="size-5 text-mint" aria-hidden="true" />
           <p className="mt-3 font-display font-bold">Your files are yours.</p>
@@ -83,6 +84,54 @@ export function FixMyTechShell({ children }: { children: ReactNode }) {
           {navItems.slice(0, 4).map(({ label, to, icon: Icon }) => <Link key={to} to={to} className={`flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-2xl text-[10px] font-semibold ${location.pathname.startsWith(to) ? "text-indigo" : "text-soft"}`}><Icon className="size-4" aria-hidden="true" />{label}</Link>)}
         </div>
       </nav>
+    </div>
+  );
+}
+
+function ThemeMenu({
+  theme,
+  themeOpen,
+  onToggle,
+  onChoose,
+  mobile = false,
+}: {
+  theme: AppTheme;
+  themeOpen: boolean;
+  onToggle: () => void;
+  onChoose: (theme: AppTheme) => void;
+  mobile?: boolean;
+}) {
+  return (
+    <div className={mobile ? "mt-3" : "mt-6"}>
+      <Button
+        type="button"
+        variant="quiet"
+        className="w-full justify-between"
+        onClick={onToggle}
+        aria-expanded={themeOpen}
+        aria-controls={mobile ? "mobile-theme-options" : "desktop-theme-options"}
+      >
+        <span className="flex items-center gap-2"><Palette className="size-4 text-indigo" /> Theme</span>
+        <span className="font-mono text-[10px] uppercase tracking-wide text-soft">{theme}</span>
+      </Button>
+      {themeOpen && (
+        <div id={mobile ? "mobile-theme-options" : "desktop-theme-options"} className="mt-2 grid gap-1 rounded-2xl border border-line bg-surface p-1.5 shadow-card" role="radiogroup" aria-label="Theme">
+          {themeOptions.map((option) => (
+            <Button
+              key={option.value}
+              type="button"
+              variant={theme === option.value ? "secondary" : "ghost"}
+              className="min-h-12 justify-between px-3 text-left"
+              onClick={() => onChoose(option.value)}
+              role="radio"
+              aria-checked={theme === option.value}
+            >
+              <span className="min-w-0"><span className="block text-sm font-semibold">{option.label}</span><span className="block truncate text-[10px] font-normal text-soft">{option.description}</span></span>
+              {theme === option.value && <Check className="size-4 shrink-0 text-indigo" aria-label="Selected" />}
+            </Button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
