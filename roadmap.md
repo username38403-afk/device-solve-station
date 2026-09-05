@@ -1,4 +1,4 @@
-- [ ] Add centralized persistent Default / Light / Dark / Illustration themes and menu submenu.
-- [ ] Replace placeholder tool views with working browser-safe diagnostics, device checks, file utilities, security checks, and search.
-- [ ] Add user-friendly loading, validation, error, reset, copy, and download states without changing existing routes.
-- [ ] Verify navigation, interactions, persistence, responsive layouts, and runtime errors in desktop/mobile previews.
+- [x] Add centralized persistent Default / Light / Dark / Illustration themes and menu submenu.
+- [x] Replace placeholder tool views with working browser-safe diagnostics, device checks, file utilities, security checks, and search.
+- [x] Add user-friendly loading, validation, error, reset, copy, and download states without changing existing routes.
+- [x] Verify navigation, interactions, persistence, responsive layouts, and runtime errors in desktop/mobile previews.
