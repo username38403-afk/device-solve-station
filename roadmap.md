@@ -4,6 +4,5 @@
 - [x] Verify navigation, interactions, persistence, responsive layouts, and runtime errors in desktop/mobile previews.
 - [ ] Remove Illustration theme and replace the text mark with a custom FixMyTech circuit-knot brand mark.
 - [ ] Add accessible motion and interaction polish across the existing shell, cards, and workspaces.
-- [ ] Add real Lovable AI troubleshooting assistant with streaming responses and clear gateway errors.
 - [ ] Add browser-safe network intelligence, storage health, password strength, and SHA-256 checksum tools.
 - [ ] Verify new routes, assistant states, responsive layouts, reduced motion, and runtime errors.
