@@ -1258,16 +1258,6 @@ The final result should be:
 
 Do not stop after creating the homepage. Implement the complete product experience, all pages, navigation, workflows, states, components, and functionality described above.
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/1e9b6544-1aea-4ab5-9c28-5cee4d300561).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
 ## Development
 
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
