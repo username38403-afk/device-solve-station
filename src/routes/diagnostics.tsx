@@ -33,7 +33,7 @@ function DiagnosticsPage() {
     const started = performance.now();
     try {
       if (!navigator.onLine) throw new Error("offline");
-      const response = await fetch(`${window.location.origin}/favicon.ico?diagnostic=${Date.now()}`, { cache: "no-store" });
+      const response = await fetch(`${window.location.origin}/diagnostic-test.txt?diagnostic=${Date.now()}`, { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const elapsed = Math.max(1, performance.now() - started);
       if (kind === "connection") setResult({ label: "Connection healthy", value: "Reachable", detail: `A browser request completed in ${Math.round(elapsed)} ms.`, tone: "good" });
