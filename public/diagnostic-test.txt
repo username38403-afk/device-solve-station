@@ -1,0 +1,1 @@
+FixMyTech diagnostic test resource.
